@@ -26,6 +26,11 @@ class GeneratingThread: Thread {
     let generatingPeriod = 20
     var storage: ChipStorage
 
+    init(with storage: ChipStorage) {
+        self.storage = storage
+        super.init()
+    }
+
     override func main() {
         var limiter = 0
 
@@ -39,13 +44,26 @@ class GeneratingThread: Thread {
             }
         }
     }
-
-    init(with storage: ChipStorage) {
-        self.storage = storage
-        super.init()
-    }
 }
 
 class WorkThread: Thread {
+    var storage: ChipStorage
+    var generatingThread: GeneratingThread
 
+    init(with storage: ChipStorage, and generatingThread: GeneratingThread) {
+        self.storage = storage
+        self.generatingThread = generatingThread
+        super.init()
+    }
+
+    override func main() {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            if self.generatingThread.isFinished && self.storage.chips.isEmpty {
+                timer.invalidate()
+            }
+            if let chip = self.storage.getChip() {
+                chip.sodering()
+            }
+        }
+    }
 }
