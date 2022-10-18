@@ -8,6 +8,7 @@ class ChipStorage {
     func addToStorage(chip: Chip) {
         storageQueue.async(flags: .barrier) {
             self.chips.append(chip)
+            print("Chip added into storage")
         }
     }
 
@@ -17,6 +18,7 @@ class ChipStorage {
         storageQueue.async(flags: .barrier) {
             chip = self.chips.remove(at: self.chips.count - 1)
         }
+        print("Chip given for soldering from storage")
         return chip
     }
 }
@@ -36,6 +38,7 @@ class GeneratingThread: Thread {
 
         Timer.scheduledTimer(withTimeInterval: TimeInterval(timePeriod), repeats: true) { timer in
             let chip = Chip.make()
+            print("Chip made")
             self.storage.addToStorage(chip: chip)
 
             limiter += Int(timer.timeInterval)
@@ -43,6 +46,8 @@ class GeneratingThread: Thread {
                 timer.invalidate()
             }
         }
+        RunLoop.current.run()
+        print("Generating Thread exit")
     }
 }
 
@@ -57,13 +62,22 @@ class WorkThread: Thread {
     }
 
     override func main() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
             if self.generatingThread.isFinished && self.storage.chips.isEmpty {
                 timer.invalidate()
             }
             if let chip = self.storage.getChip() {
                 chip.sodering()
+                print("Chip soldered")
             }
         }
+        RunLoop.current.run()
+        print("Work Thread exit")
     }
 }
+
+let storage = ChipStorage()
+let generationThread = GeneratingThread(with: storage)
+let workThread = WorkThread(with: storage, and: generationThread)
+generationThread.start()
+workThread.start()
