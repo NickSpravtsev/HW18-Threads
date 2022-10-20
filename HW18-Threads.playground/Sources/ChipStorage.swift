@@ -18,7 +18,7 @@ public class ChipStorage {
         guard chips.count > 0 else { return nil }
 
         var chip: Chip?
-        storageQueue.async(flags: .barrier) {
+        storageQueue.sync(flags: .barrier) {
             chip = self.chips.remove(at: self.chips.count - 1)
         }
 
