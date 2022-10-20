@@ -14,6 +14,7 @@ class ChipStorage {
 
     func getChip() -> Chip? {
         guard chips.count > 0 else { return nil }
+
         var chip: Chip?
         storageQueue.async(flags: .barrier) {
             chip = self.chips.remove(at: self.chips.count - 1)
@@ -40,8 +41,8 @@ class GeneratingThread: Thread {
             let chip = Chip.make()
             print("Chip made")
             self.storage.addToStorage(chip: chip)
-
             limiter += Int(timer.timeInterval)
+            
             if limiter >= self.generatingPeriod {
                 timer.invalidate()
             }
