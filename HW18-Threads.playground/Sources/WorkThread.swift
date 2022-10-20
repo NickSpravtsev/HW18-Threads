@@ -6,7 +6,6 @@ public class WorkThread: Thread {
 
     public init(with storage: ChipStorage, and generatingThread: GeneratingThread) {
         self.storage = storage
-        self.generatingThread = generatingThread
         super.init()
     }
 
