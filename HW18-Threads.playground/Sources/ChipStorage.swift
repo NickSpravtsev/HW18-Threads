@@ -2,6 +2,7 @@ import PlaygroundSupport
 import Foundation
 
 public class ChipStorage {
+    var isProductionRunning: Bool?
     let storageQueue = DispatchQueue(label: "Storage queue", attributes: .concurrent)
     var chips = [Chip]()
 

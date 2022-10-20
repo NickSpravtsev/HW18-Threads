@@ -12,6 +12,7 @@ public class GeneratingThread: Thread {
     }
 
     public override func main() {
+        storage.isProductionRunning = true
         var limiter = 0
 
         Timer.scheduledTimer(withTimeInterval: TimeInterval(timePeriod), repeats: true) { timer in
@@ -25,6 +26,7 @@ public class GeneratingThread: Thread {
             }
         }
         RunLoop.current.run()
+        storage.isProductionRunning = false
         print("Generating Thread exit")
     }
 }
