@@ -18,6 +18,7 @@ public struct Chip {
     }
     
     public func sodering() {
+        print("chip 2")
         let soderingTime = chipType.rawValue
         sleep(UInt32(soderingTime))
     }

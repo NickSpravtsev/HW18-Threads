@@ -1,4 +1,3 @@
-import PlaygroundSupport
 import Foundation
 
 public class WorkThread: Thread {

@@ -14,12 +14,14 @@ public class GeneratingThread: Thread {
     public override func main() {
         storage.isProductionRunning = true
         var limiter = 0
+        var chipNumber = 1
 
         Timer.scheduledTimer(withTimeInterval: TimeInterval(timePeriod), repeats: true) { timer in
             let chip = Chip.make()
-            print("Chip made")
+            print("Chip №\(chipNumber) made")
             self.storage.addToStorage(chip: chip)
             limiter += Int(timer.timeInterval)
+            chipNumber += 1
 
             if limiter >= self.generatingPeriod {
                 timer.invalidate()

@@ -11,7 +11,6 @@ public class ChipStorage {
     func addToStorage(chip: Chip) {
         storageQueue.async(flags: .barrier) {
             self.chips.append(chip)
-            print("Chip added into storage")
         }
     }
 
@@ -22,7 +21,7 @@ public class ChipStorage {
         storageQueue.async(flags: .barrier) {
             chip = self.chips.remove(at: self.chips.count - 1)
         }
-        print("Chip given for soldering from storage")
+
         return chip
     }
 }
