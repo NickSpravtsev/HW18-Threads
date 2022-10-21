@@ -1,3 +1,8 @@
-import UIKit
+import PlaygroundSupport
+import Foundation
 
-var greeting = "Hello, playground"
+let storage = ChipStorage()
+let generationThread = GeneratingThread(with: storage)
+let workThread = WorkThread(with: storage)
+generationThread.start()
+workThread.start()
