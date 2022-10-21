@@ -10,17 +10,12 @@ public class WorkThread: Thread {
     }
 
     public override func main() {
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-            if !(self.storage.isProductionRunning ?? true) && self.storage.chips.isEmpty {
-                timer.invalidate()
-            }
-
+        while self.storage.isProductionRunning ?? true || !self.storage.chips.isEmpty {
             if let chip = self.storage.getChip() {
                 chip.sodering()
                 print("Chip soldered")
             }
         }
-        RunLoop.current.run()
         print("Work Thread exit")
     }
 }
